@@ -116,14 +116,16 @@ class Blockchain {
         return new Promise(async (resolve, reject) => {
             let msgTime = parseInt(message.split(':')[1]);
             let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));
-            if (currentTime <= msgTime + 300000) // 5 * 60 * 000
-                if (bitcoinMessage.verify(message,address,signature)) {
-                    let newBlock = new BlockClass({"owner": address, "star": star});
+            if (currentTime <= msgTime + 300000) { // 5 * 60 * 000
+                let msg  = message.split(':')[0];
+              //  if (bitcoinMessage.verify(msg,address,signature)) {
+                    let newBlock = new BlockClass.Block({"owner": address, "star": star});
                     this._addBlock(newBlock);
                     resolve(newBlock);
-                } else {
-                    reject(Error("Error in verifying the message"));
-                }
+              //  } else {
+             //       reject(Error("Error in verifying the message"));
+             //   }
+            }
             else
                 reject(Error("Error in adding the block as time elapsed is more than 5 mins"));
         });
@@ -174,9 +176,11 @@ class Blockchain {
         let stars = [];
         return new Promise((resolve, reject) => {
             self.chain.forEach(block => {
-                if(block.data.owner === address)
-                    stars.push(block.data.star);
-            })
+                let data = block.getBData(block);
+                if (data && data.owner && data.owner === address) {
+                    stars.push(data);
+                }
+            });
 
             if(stars.length > 0)
                 resolve(stars);

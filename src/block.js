@@ -80,7 +80,7 @@ class Block {
         if(parsedBody.data !== 'Genesis Block')
             return parsedBody;
         else 
-            throw new Error('Genesis Block!!! ');
+            return 'Genesis Block!!!';
     }
 
 }
