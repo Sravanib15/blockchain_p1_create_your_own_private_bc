@@ -22,7 +22,7 @@ class BlockchainController {
     // Enpoint to Get a Block by Height (GET Endpoint)
     getBlockByHeight() {
         this.app.get("/block/height/:height", async (req, res) => {
-            if(req.params.height) {
+            if(req.params.height >= 0) {
                 const height = parseInt(req.params.height);
                 let block = await this.blockchain.getBlockByHeight(height);
                 if(block){
@@ -41,6 +41,7 @@ class BlockchainController {
     requestOwnership() {
         this.app.post("/requestValidation", async (req, res) => {
             if(req.body.address) {
+                console.log(req.body);
                 const address = req.body.address;
                 const message = await this.blockchain.requestMessageOwnershipVerification(address);
                 if(message){
